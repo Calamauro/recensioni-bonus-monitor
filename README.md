@@ -4,7 +4,7 @@
 
 🇬🇧 [English version](README.en.md)
 
-[▶ Demo live (dati fittizi)](https://LINK-DEMO.streamlit.app) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Demo live (dati fittizi)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
 
 > La demo usa **dati completamente inventati** (strutture, ospiti, recensioni) e non richiede credenziali.
 
@@ -98,4 +98,4 @@ Per la versione completa: eseguire `supabase/schema.sql` e `supabase/esclusioni.
 ## Autore
 
 **Davide Buccino** · Data Analyst · Roma
-[LinkedIn](#) · [Portfolio](#)
+[LinkedIn](https://www.linkedin.com/in/davide-buccino) · [Portfolio](https://sites.google.com/view/davide-buccino/)

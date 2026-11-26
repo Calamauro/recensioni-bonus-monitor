@@ -4,7 +4,7 @@
 
 🇮🇹 [Versione italiana](README.md)
 
-[▶ Live demo (fictitious data)](https://LINK-DEMO.streamlit.app) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Live demo (fictitious data)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
 
 > The demo uses **entirely made-up data** (properties, guests, reviews) and requires no login.
 > The app interface is in Italian.
@@ -100,4 +100,4 @@ For the full version: run `supabase/schema.sql` and `supabase/esclusioni.sql` on
 ## Author
 
 **Davide Buccino** · Data Analyst · Rome
-[LinkedIn](#) · [Portfolio](#)
+[LinkedIn](https://www.linkedin.com/in/davide-buccino) · [Portfolio](https://sites.google.com/view/davide-buccino/)
