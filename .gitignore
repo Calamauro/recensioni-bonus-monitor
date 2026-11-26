@@ -1,0 +1,8 @@
+__pycache__/
+.browser_profile/
+*.csv
+*.xlsx
+.streamlit/secrets.toml
+.env
+aggiorna.bat
+log_scraping.txt
