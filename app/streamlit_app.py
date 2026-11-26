@@ -197,7 +197,7 @@ with st.expander("⚙️ Filtri", expanded=False):
         al_s = cc2.date_input("Al", oggi, format="DD/MM/YYYY")
     crit_label = st.radio("Periodo calcolato su", list(L.CRITERI), horizontal=True,
                           help="Data recensione = giorno in cui l'ospite ha scritto. "
-                               "Mese soggiorno = mese in cui ha dormito (Booking mostra solo mese/anno).")
+                               "Mese soggiorno = mese in cui ha dormito (le piattaforme mostrano solo mese/anno).")
     metodi_inv = {v: k for k, v in L.METODI.items()}
     metodo_label = st.radio("Media per il bonus", list(L.METODI), horizontal=True,
                             index=list(L.METODI).index(metodi_inv.get(prof_utente["metodo_media"],
@@ -444,5 +444,5 @@ if ultima_esec:
     icona = {"ok": "🟢", "parziale": "🟠", "errore": "🔴"}.get(e["esito"], "⚪")
     st.caption(f"{icona} Ultimo aggiornamento dati: {quando} · {e['nuove']} recensioni nuove"
                + (f" · {e['dettagli']}" if e["esito"] != "ok" and e["dettagli"] else ""))
-st.caption("La media qui è la media semplice delle recensioni nel periodo: il punteggio mostrato da Booking "
+st.caption("La media qui è la media semplice delle recensioni nel periodo: il punteggio mostrato dalle piattaforme "
            "usa un calcolo diverso (ultimi 36 mesi).")
