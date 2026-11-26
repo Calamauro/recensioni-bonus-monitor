@@ -4,11 +4,11 @@
 
 🇬🇧 [English version](README.en.md)
 
-[▶ Demo live (dati fittizi)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/ZkoRgKrfDww) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Demo live (dati fittizi)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/NblzpOS2NUs) · Python · PostgreSQL · Supabase · Streamlit
 
 > La demo usa **dati completamente inventati** (strutture, ospiti, recensioni) e non richiede credenziali.
 
-<a href="https://youtube.com/shorts/ZkoRgKrfDww"><img src="https://img.youtube.com/vi/ZkoRgKrfDww/hqdefault.jpg" alt="Guarda il video della demo" width="360"></a>
+<a href="https://youtube.com/shorts/NblzpOS2NUs"><img src="docs/copertina.png" alt="Guarda il video della demo" width="300"></a>
 
 *🎥 Video della demo (circa 1 minuto e 45 secondi)*
 
@@ -45,8 +45,8 @@ flowchart LR
 
 - 🔐 **Login multi-utente** (operatori e amministratore), nessuna registrazione libera.
 - 🎯 **Bonus a scaglioni stagionali**: inverno (1 nov – 31 mar) ed estate (1 apr – 31 ott), configurabili per ogni operatore.
-- 🏎️ **Contagiri** sfumato dal rosso al verde, uno spicchio per scaglione, con la media attuale e il prossimo obiettivo.
-- 📅 **Andamento mensile** su 12 mesi fissi: ogni mese si apre come una pivot e mostra le sue recensioni (data, mese di soggiorno, voto, ospite).
+- 🏎️ **Contagiri** con uno spicchio per scaglione: la barra oro è la media attuale, la linea blu la soglia del prossimo scaglione.
+- 📅 **Andamento mensile** su 12 mesi fissi, con grafico e riepilogo; nella sezione Recensioni ogni mese si apre come una pivot e mostra le sue recensioni (data, mese di soggiorno, voto, ospite).
 - ✅ **Esclusione di recensioni** non imputabili all'operatore (es. soggiorni durante ferie o prima del suo arrivo): più spunte e un solo "Applica e ricalcola", salvate nel database.
 - 🧪 **Simulatore** fino a 10 voti ipotetici, anche da altre strutture, per stimare media e bonus.
 - 🧮 Due metodi di media: **media delle strutture** oppure **tutte le recensioni insieme** (quello usato dall'azienda).
@@ -61,13 +61,71 @@ flowchart LR
 
 ## Modello dati
 
+```mermaid
+erDiagram
+    UTENTI ||--|| PROFILI : "ha"
+    UTENTI ||--o{ ASSEGNAZIONI : "lavora su"
+    STRUTTURE ||--o{ ASSEGNAZIONI : "assegnata a"
+    STRUTTURE ||--o{ RECENSIONI : "riceve"
+    UTENTI ||--o{ SCAGLIONI : "ha"
+    UTENTI ||--o{ ESCLUSIONI : "decide"
+    RECENSIONI ||--o{ ESCLUSIONI : "esclusa in"
+
+    UTENTI {
+        uuid id PK "auth.users (Supabase Auth)"
+    }
+    PROFILI {
+        uuid user_id PK,FK
+        text nome
+        text ruolo "operatore | admin"
+        text metodo_media
+    }
+    STRUTTURE {
+        bigint id PK
+        text nome UK
+        text url_booking
+        date raccogli_dal
+        boolean attiva
+    }
+    ASSEGNAZIONI {
+        bigint id PK
+        uuid user_id FK
+        bigint struttura_id FK
+        date conta_dal
+        date conta_fino
+    }
+    RECENSIONI {
+        text id PK "hash stabile"
+        text struttura FK
+        date data_recensione
+        date mese_soggiorno
+        numeric punteggio
+        text titolo
+        text paese
+        timestamptz inserita_il
+    }
+    SCAGLIONI {
+        bigint id PK
+        uuid user_id FK
+        numeric soglia
+        numeric bonus_inverno
+        numeric bonus_estate
+    }
+    ESCLUSIONI {
+        uuid user_id PK,FK
+        text recensione_id PK,FK
+        uuid escluso_da FK
+        timestamptz creata_il
+    }
+    ESECUZIONI {
+        bigint id PK
+        timestamptz eseguita_il
+        int nuove
+        text esito
+    }
 ```
-strutture ──< assegnazioni >── utenti (auth.users) ──< profili
-    │              (conta_dal, conta_fino)      │
-    └──< recensioni >──< esclusioni >───────────┘
-                                   utenti ──< scaglioni (soglia, bonus_inverno, bonus_estate)
-esecuzioni (registro dello scraper)
-```
+
+Tutte le tabelle hanno la **Row Level Security** attiva: un operatore legge solo le recensioni delle strutture che gli sono assegnate e scrive solo le proprie esclusioni. `esecuzioni` è il registro di ogni giro dello scraper. Nel diagramma alcune colonne descrittive di `recensioni` sono omesse.
 
 ## Struttura del repository
 

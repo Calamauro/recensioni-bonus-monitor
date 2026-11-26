@@ -4,12 +4,12 @@
 
 🇮🇹 [Versione italiana](README.md)
 
-[▶ Live demo (fictitious data)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/ZkoRgKrfDww) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Live demo (fictitious data)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/NblzpOS2NUs) · Python · PostgreSQL · Supabase · Streamlit
 
 > The demo uses **entirely made-up data** (properties, guests, reviews) and requires no login.
 > The app interface is in Italian.
 
-<a href="https://youtube.com/shorts/ZkoRgKrfDww"><img src="https://img.youtube.com/vi/ZkoRgKrfDww/hqdefault.jpg" alt="Watch the demo video" width="360"></a>
+<a href="https://youtube.com/shorts/NblzpOS2NUs"><img src="docs/copertina.png" alt="Watch the demo video" width="300"></a>
 
 *🎥 Demo video (about 1 min 45 s)*
 
@@ -46,8 +46,8 @@ flowchart LR
 
 - 🔐 **Multi-user login** (staff and admin), no public sign-up.
 - 🎯 **Seasonal bonus tiers**: winter (Nov 1 – Mar 31) and summer (Apr 1 – Oct 31), configurable per staff member.
-- 🏎️ **Gauge** shading from red to green, one segment per tier, showing the current average and the next target.
-- 📅 **Monthly trend** over 12 fixed months: each month expands like a pivot table to show its reviews (date, stay month, score, guest).
+- 🏎️ **Gauge** with one segment per tier: the gold bar is the current average, the blue line the next tier's threshold.
+- 📅 **Monthly trend** over 12 fixed months, with chart and summary; in the Reviews section each month expands like a pivot table to show its reviews (date, stay month, score, guest).
 - ✅ **Review exclusion** for reviews not attributable to the staff member (e.g. stays during days off or before they started): tick several, then a single "Apply & recalculate", stored in the database.
 - 🧪 **What-if simulator** with up to 10 hypothetical scores, including from other properties, to estimate average and bonus.
 - 🧮 Two averaging methods: **average of properties** or **all reviews together** (the one the company uses).
@@ -62,14 +62,71 @@ flowchart LR
 
 ## Data model
 
+```mermaid
+erDiagram
+    UTENTI ||--|| PROFILI : "has"
+    UTENTI ||--o{ ASSEGNAZIONI : "works on"
+    STRUTTURE ||--o{ ASSEGNAZIONI : "assigned to"
+    STRUTTURE ||--o{ RECENSIONI : "receives"
+    UTENTI ||--o{ SCAGLIONI : "has"
+    UTENTI ||--o{ ESCLUSIONI : "decides"
+    RECENSIONI ||--o{ ESCLUSIONI : "excluded in"
+
+    UTENTI {
+        uuid id PK "auth.users (Supabase Auth)"
+    }
+    PROFILI {
+        uuid user_id PK,FK
+        text nome
+        text ruolo "operatore | admin"
+        text metodo_media
+    }
+    STRUTTURE {
+        bigint id PK
+        text nome UK
+        text url_booking
+        date raccogli_dal
+        boolean attiva
+    }
+    ASSEGNAZIONI {
+        bigint id PK
+        uuid user_id FK
+        bigint struttura_id FK
+        date conta_dal
+        date conta_fino
+    }
+    RECENSIONI {
+        text id PK "hash stabile"
+        text struttura FK
+        date data_recensione
+        date mese_soggiorno
+        numeric punteggio
+        text titolo
+        text paese
+        timestamptz inserita_il
+    }
+    SCAGLIONI {
+        bigint id PK
+        uuid user_id FK
+        numeric soglia
+        numeric bonus_inverno
+        numeric bonus_estate
+    }
+    ESCLUSIONI {
+        uuid user_id PK,FK
+        text recensione_id PK,FK
+        uuid escluso_da FK
+        timestamptz creata_il
+    }
+    ESECUZIONI {
+        bigint id PK
+        timestamptz eseguita_il
+        int nuove
+        text esito
+    }
 ```
-properties ──< assignments >── users (auth.users) ──< profiles
-    │             (count_from, count_to)        │
-    └──< reviews >──< exclusions >──────────────┘
-                                   users ──< tiers (threshold, winter_bonus, summer_bonus)
-runs (scraper log)
-```
-Table names in the code are in Italian (`strutture`, `assegnazioni`, `recensioni`, `esclusioni`, `scaglioni`, `esecuzioni`).
+
+Every table has **Row Level Security** enabled: an operator can only read reviews of the properties assigned to them and only write their own exclusions. `esecuzioni` logs every scraper run. Some descriptive columns of `recensioni` are omitted from the diagram.
 
 ## Repository layout
 
