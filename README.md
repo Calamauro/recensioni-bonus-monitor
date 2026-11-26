@@ -4,9 +4,13 @@
 
 🇬🇧 [English version](README.en.md)
 
-[▶ Demo live (dati fittizi)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Demo live (dati fittizi)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/7IBAIAJx0p8) · Python · PostgreSQL · Supabase · Streamlit
 
 > La demo usa **dati completamente inventati** (strutture, ospiti, recensioni) e non richiede credenziali.
+
+<a href="https://youtube.com/shorts/7IBAIAJx0p8"><img src="https://img.youtube.com/vi/7IBAIAJx0p8/hqdefault.jpg" alt="Guarda il video della demo" width="360"></a>
+
+*🎥 Video della demo (circa 1 minuto e 45 secondi)*
 
 ---
 

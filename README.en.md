@@ -4,10 +4,14 @@
 
 🇮🇹 [Versione italiana](README.md)
 
-[▶ Live demo (fictitious data)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](#) · Python · PostgreSQL · Supabase · Streamlit
+[▶ Live demo (fictitious data)](https://bonus-monitor-demo.streamlit.app/) · [🎥 Video](https://youtube.com/shorts/7IBAIAJx0p8) · Python · PostgreSQL · Supabase · Streamlit
 
 > The demo uses **entirely made-up data** (properties, guests, reviews) and requires no login.
 > The app interface is in Italian.
+
+<a href="https://youtube.com/shorts/7IBAIAJx0p8"><img src="https://img.youtube.com/vi/7IBAIAJx0p8/hqdefault.jpg" alt="Watch the demo video" width="360"></a>
+
+*🎥 Demo video (about 1 min 45 s)*
 
 ---
 
