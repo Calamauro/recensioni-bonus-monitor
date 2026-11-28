@@ -49,7 +49,8 @@ flowchart LR
 - 🏎️ **Gauge** with one segment per tier: the gold bar is the current average, the blue line the next tier's threshold.
 - 📅 **Monthly trend** over 12 fixed months, with chart and summary; in the Reviews section each month expands like a pivot table to show its reviews (date, stay month, score, guest).
 - ✅ **Review exclusion** for reviews not attributable to the staff member (e.g. stays during days off or before they started): tick several, then a single "Apply & recalculate", stored in the database.
-- 🧪 **What-if simulator** with up to 10 hypothetical scores, including from other properties, to estimate average and bonus.
+- 🌍 **Three-language interface** (Italian, English, Russian) with industry terminology; each user's language choice is saved.
+- 🧪 **What-if simulator** with up to 10 hypothetical scores, including from other properties, to estimate average and bonus; simulated votes are kept for the next login.
 - 🧮 Two averaging methods: **average of properties** or **all reviews together** (the one the company uses).
 
 ## Technical highlights
@@ -151,7 +152,7 @@ pip install -r app/requirements.txt
 streamlit run app/streamlit_app.py      # starts in demo mode when no secrets are set
 ```
 
-For the full version: run `supabase/schema.sql` and `supabase/esclusioni.sql` on a Supabase project, set up users with `supabase/aggiungi_utente.sql`, and add `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to `app/.streamlit/secrets.toml` (see `secrets.toml.esempio`).
+For the full version: run `supabase/schema.sql`, `supabase/esclusioni.sql` and `supabase/simulazioni.sql`, `supabase/stipendio.sql`, `supabase/preferenze.sql` on a Supabase project, set up users with `supabase/aggiungi_utente.sql`, and add `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to `app/.streamlit/secrets.toml` (see `secrets.toml.esempio`).
 
 ## Notes
 

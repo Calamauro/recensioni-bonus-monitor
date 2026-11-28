@@ -48,7 +48,8 @@ flowchart LR
 - 🏎️ **Contagiri** con uno spicchio per scaglione: la barra oro è la media attuale, la linea blu la soglia del prossimo scaglione.
 - 📅 **Andamento mensile** su 12 mesi fissi, con grafico e riepilogo; nella sezione Recensioni ogni mese si apre come una pivot e mostra le sue recensioni (data, mese di soggiorno, voto, ospite).
 - ✅ **Esclusione di recensioni** non imputabili all'operatore (es. soggiorni durante ferie o prima del suo arrivo): più spunte e un solo "Applica e ricalcola", salvate nel database.
-- 🧪 **Simulatore** fino a 10 voti ipotetici, anche da altre strutture, per stimare media e bonus.
+- 🌍 **Interfaccia in tre lingue** (italiano, inglese, russo) con terminologia di settore; la lingua scelta resta salvata per ogni utente.
+- 🧪 **Simulatore** fino a 10 voti ipotetici, anche da altre strutture, per stimare media e bonus; i voti restano salvati al successivo accesso.
 - 🧮 Due metodi di media: **media delle strutture** oppure **tutte le recensioni insieme** (quello usato dall'azienda).
 
 ## Scelte tecniche interessanti
@@ -150,7 +151,7 @@ pip install -r app/requirements.txt
 streamlit run app/streamlit_app.py      # senza segreti parte in modalità demo
 ```
 
-Per la versione completa: eseguire `supabase/schema.sql` e `supabase/esclusioni.sql` su un progetto Supabase, configurare gli utenti con `supabase/aggiungi_utente.sql` e aggiungere `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` in `app/.streamlit/secrets.toml` (vedi `secrets.toml.esempio`).
+Per la versione completa: eseguire `supabase/schema.sql`, `supabase/esclusioni.sql` e `supabase/simulazioni.sql`, `supabase/stipendio.sql`, `supabase/preferenze.sql` su un progetto Supabase, configurare gli utenti con `supabase/aggiungi_utente.sql` e aggiungere `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` in `app/.streamlit/secrets.toml` (vedi `secrets.toml.esempio`).
 
 ## Note
 
