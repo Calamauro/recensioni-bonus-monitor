@@ -131,6 +131,9 @@ def _tabelle_iniziali() -> dict:
                       for u in ("op_giulia", "op_marco") for a, b, c in SCAGLIONI],
         "recensioni": _genera_recensioni(),
         "esclusioni": [],
+        "simulazioni": [],
+        "stipendio": [],
+        "preferenze": [],
         "esecuzioni": [{"eseguita_il": adesso.isoformat(), "nuove": 2, "esito": "ok", "dettagli": ""}],
     }
 
@@ -160,7 +163,7 @@ class DemoDB:
 
     # --- letture (filtri minimi in stile PostgREST, come li usa l'app)
     def leggi(self, token: str, tabella: str, params: dict) -> list[dict]:
-        righe = list(self._db()[tabella])
+        righe = list(self._db().get(tabella, []))
         for campo, filtro in params.items():
             if campo in ("select", "order", "limit", "offset"):
                 continue
@@ -173,16 +176,26 @@ class DemoDB:
             righe = righe[: int(params["limit"])]
         return righe
 
-    # --- scritture (solo esclusioni)
+    # --- scritture (esclusioni e simulazioni), stessa logica dei filtri di lettura
+    _CHIAVI = {"esclusioni": ("user_id", "recensione_id"), "simulazioni": ("user_id", "operatore_id", "ordine"),
+               "stipendio": ("user_id", "operatore_id")}
+
     def inserisci(self, token: str, tabella: str, righe: list[dict]) -> None:
-        tab = self._db()[tabella]
-        presenti = {(r["user_id"], r["recensione_id"]) for r in tab}
+        tab = self._db().setdefault(tabella, [])
+        campi = self._CHIAVI.get(tabella)
+        presenti = {tuple(r.get(c) for c in campi) for r in tab} if campi else set()
         for r in righe:
-            if (r["user_id"], r["recensione_id"]) not in presenti:
+            if not campi or tuple(r.get(c) for c in campi) not in presenti:
                 tab.append(dict(r))
 
     def elimina(self, token: str, tabella: str, filtri: dict) -> None:
-        utente = filtri["user_id"][3:]
-        ids = {v.strip('"') for v in filtri["recensione_id"][4:-1].split(",")}
-        self._db()[tabella] = [r for r in self._db()[tabella]
-                               if not (r["user_id"] == utente and r["recensione_id"] in ids)]
+        def corrisponde(r: dict) -> bool:
+            for campo, filtro in filtri.items():
+                if filtro.startswith("eq.") and str(r.get(campo)) != filtro[3:]:
+                    return False
+                if filtro.startswith("in.("):
+                    valori = {v.strip().strip('"') for v in filtro[4:-1].split(",")}
+                    if str(r.get(campo)) not in valori:
+                        return False
+            return True
+        self._db()[tabella] = [r for r in self._db().get(tabella, []) if not corrisponde(r)]
